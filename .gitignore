@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/MedVoll.Web/vollmed.db
+/MedVoll.Web/vollmed.db-shm
+/MedVoll.Web/vollmed.db-wal

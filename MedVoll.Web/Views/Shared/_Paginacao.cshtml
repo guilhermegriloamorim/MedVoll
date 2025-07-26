@@ -1,0 +1,45 @@
+@using MedVoll.Web.Dtos;
+@model IPaginatedList
+
+@{
+    var url = ViewData["Url"] as string ?? "/";
+}
+
+<div class="table-footer">
+    @if (Model != null && Model.TotalItemCount > 0)
+    {
+        <p class="results">
+            Exibindo <b>@Model.PageSize</b> de <b>@Model.TotalItemCount</b> registros
+        </p>
+        <div class="pagination">
+            @{
+                var anterior = Model.HasPreviousPage ? $"{url}?page={Model.PageNumber - 1}" : "";
+                var proximo = Model.HasNextPage ? $"{url}?page={Model.PageNumber + 1}" : "";
+            }
+
+            <a href="@anterior" class="btn btn-pagination @(Model.HasPreviousPage ? " " : " disabled")">Anterior</a>
+
+            @for (var n = 1; n <= Model.TotalPages; n++)
+            {
+                if (n == Model.PageNumber)
+                {
+                    <span class="page-item active disabled">
+                        <span class="current-page">@n</span>
+                    </span>
+                }
+                else
+                {
+                    <span class="page-item">
+                        <a href="@($" {url}?page={n}")" class="page-link">@n</a>
+                    </span>
+                }
+            }
+
+            <a href="@proximo" class="btn btn-pagination @(Model.HasNextPage ? " " : " disabled")">Próximo</a>
+        </div>
+    }
+    else
+    {
+        <div class="hint-text">Nenhum registro encontrado.</div>
+    }
+</div>

@@ -1,0 +1,61 @@
+﻿@using MedVoll.Web.Dtos;
+@model MedVoll.Web.Dtos.ConsultaDto
+@{
+    ViewData["Title"] = "Agendamento de Consultas";
+    var especialidades = ViewData["Especialidades"] as List<Especialidade>;
+    especialidades = especialidades ?? new List<Especialidade>();
+    var medicos = ViewData["Medicos"] as List<MedicoDto>;
+    medicos = medicos ?? new List<MedicoDto>();
+}
+
+<main class="container">
+    <section class="card form-card">
+        <h2 class="title">Agendamento de Consultas</h2>
+
+        <form method="post" asp-action="" asp-controller="Consultas">
+            <input type="hidden" name="_method" value="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label for="especialidade">Especialidade</label>
+                <select asp-for="Especialidade" class="form-control" required>
+                    <option value="">[SELECIONE UMA ESPECIALIDADE]</option>
+                    @foreach (var especialidade in especialidades)
+                    {
+                        <option value="@especialidade">@especialidade.GetDisplayName()</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="idMedico">Médico</label>
+                <select asp-for="IdMedico" class="form-control" required>
+                    <option value="">Selecione um médico</option>
+                    @foreach (var medico in medicos)
+                    {
+                        <option value="@medico.Id">@medico.Nome</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cpf">CPF do Paciente</label>
+                <input asp-for="Paciente" type="number" class="form-control" placeholder="Digite o CPF do paciente" required />
+            </div>
+
+            <div class="form-group">
+                <label for="data">Data</label>
+                <input asp-for="Data" type="datetime-local" class="form-control" required />
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn btn-primary">
+                    <img src="/assets/plus.png" alt="Ícone de adicionar" class="btn-icon">Cadastrar
+                </button>
+                <a href="@Url.Action(" Index", "Consultas" )" class="btn btn-secondary">
+                    <img src="~/assets/back.png" alt="Voltar" class="btn-icon">Voltar
+                </a>
+            </div>
+        </form>
+    </section>
+</main>

@@ -1,0 +1,50 @@
+﻿@using MedVoll.Web.Dtos;
+@model PaginatedList<MedVoll.Web.Dtos.ConsultaDto>
+
+<main class="container">
+    <section class="card">
+        <h2 class="title">Listagem de consultas</h2>
+
+        <div class="table-controls">
+            <a href="@Url.Action("Formulario", "Consultas" )" class="btn btn-tertiary">
+                <img src="~/assets/plus.png" alt="Ícone de adicionar" class="btn-icon">
+                Nova consulta
+            </a>
+        </div>
+
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Paciente</th>
+                    <th>Telefone</th>
+                    <th>Especialidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var consulta in Model)
+                {
+                    <tr>
+                        <td>@consulta.MedicoNome</td>
+                        <td>@consulta.Paciente</td>
+                        <td>@consulta.Data.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@consulta.Especialidade.GetDisplayName()</td>
+                        <td>
+                            <a href="@Url.Action("Formulario", "Consultas" , new { id=consulta.Id })" class="btn btn-edit" title="Editar">
+                                <img src="~/assets/edit.svg" alt="Editar">
+                            </a>
+                            <a href="#deleteModal" class="btn btn-delete" data-toggle="modal" data-id="@consulta.Id" data-url="/consultas" title="Excluir">
+                                <img src="~/assets/delete.svg" alt="Excluir">
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @await Html.PartialAsync("_paginacao", Model)
+    </section>
+</main>
+
+@await Html.PartialAsync("_ModalExcluir")

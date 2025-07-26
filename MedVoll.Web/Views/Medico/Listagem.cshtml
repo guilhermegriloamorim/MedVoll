@@ -1,0 +1,65 @@
+@using MedVoll.Web.Dtos;
+@model PaginatedList<MedVoll.Web.Dtos.MedicoDto>
+@using System.Security.Claims
+
+@{
+    Claim roleClaim = User.Claims.FirstOrDefault(c => c.Type == "Role");
+}
+
+<main class="container">
+    <section class="card">
+        <h2 class="title">Listagem de médicos</h2>
+
+        @if (roleClaim?.Value == "Admin")
+        {
+            <div class="table-controls">
+                <a href="@Url.Action("Formulario", "Medicos" )" class="btn btn-tertiary">
+                    <img src="~/assets/plus.png" alt="Ícone de adicionar" class="btn-icon">
+                    Novo Médico
+                </a>
+            </div>
+        }
+
+        <table class="tabela">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>CRM</th>
+                    <th>Especialidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var medico in Model)
+                {
+                <tr>
+                    <td>@Html.Raw(medico.Nome)</td>
+                    <td>@medico.Email</td>
+                    <td>@medico.Crm</td>
+                    <td>@medico.Especialidade.GetDisplayName()</td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                            {
+                                
+                        <a href="@Url.Action("Formulario", "Medicos" , new { id=medico.Id })" class="btn btn-edit" title="Editar">
+                            <img src="~/assets/edit.svg" alt="Editar">
+                        </a>
+
+                        <a href="#deleteModal" class="btn btn-delete" data-toggle="modal" data-id="@medico.Id" data-url="/medicos" title="Excluir">
+                            <img src="~/assets/delete.svg" alt="Excluir">
+                        </a>
+                            }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+        @await Html.PartialAsync("_paginacao", Model)
+    </section>
+</main>
+
+<!-- Modal de Exclusão -->
+@await Html.PartialAsync("_ModalExcluir")

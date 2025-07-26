@@ -1,0 +1,26 @@
+@{
+    var erro = ViewData["Erro"] as string;
+    var sucesso = ViewContext.HttpContext.Request.Query["sucesso"];
+}
+
+<div>
+    @* Exibe mensagem de erro se estiver presente *@
+    @if (!string.IsNullOrEmpty(erro))
+    {
+    <div class="alert alert-danger text-center text-uppercase">
+        <p>
+            <strong>@erro</strong>
+        </p>
+    </div>
+    }
+
+    @* Exibe mensagem de sucesso se o parâmetro de sucesso estiver presente na query string *@
+    @if (!string.IsNullOrEmpty(sucesso))
+    {
+    <div class="alert alert-success text-center text-uppercase">
+        <p>
+            <strong>Operação realizada com sucesso!</strong>
+        </p>
+    </div>
+    }
+</div>
